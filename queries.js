@@ -1,6 +1,7 @@
 const request = require("request");
 const fetch = require("node-fetch");
 const Pool = require("pg").Pool;
+const { response } = require("express");
 
 const pool = new Pool({
   user: "postgres",
@@ -22,8 +23,17 @@ const getStudents = (req, res) => {
 const createStudent = (req, res) => {
   const { firstname, lastname, captcha } = req.body;
 
-  if (captcha === undefined || captcha === "" || captcha == null) {
+  if (captcha === undefined || captcha === "" || captcha === null) {
     return res.json({ success: false, msg: "Please select captcha" });
+  } else if (
+    firstname === undefined ||
+    firstname === "" ||
+    firstname === null ||
+    lastname === undefined ||
+    lastname === "" ||
+    lastname === null
+  ) {
+    return res.status(400).json({ msg: "Error please try again" });
   }
 
   const isValid = validation(captcha, req.connection.remoteAddress);
