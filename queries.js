@@ -39,7 +39,9 @@ const createStudent = (req, res) => {
   const isValid = validation(captcha, req.connection.remoteAddress);
 
   if (isValid.success === false) {
-    return res.status(400).json({ msg: "Failed captcha verification" });
+    return res
+      .status(400)
+      .json({ success: false, msg: "Failed captcha verification" });
   }
 
   pool.query(
